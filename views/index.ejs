@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>csv2ots</title>
+</head>
+<body>
+    <h1>csv2ots</h1>
+    <h2>Téléversez un fichier .csv</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="csvfile" accept=".csv" required>
+        <button type="submit">Téléverser</button>
+    </form>
+    
+    <%= msg %>
+</body>
+</html>
