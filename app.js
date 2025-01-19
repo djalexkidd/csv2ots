@@ -69,11 +69,12 @@ async function otsCreate(csvEmail, csvSecret) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Basic ${btoa(process.env.OTS_USERNAME + ':' + process.env.OTS_APIKEY)}`
         },
         body: new URLSearchParams({
             secret: csvSecret,
             ttl: '3600',
-            //recipient: [csvEmail]
+            recipient: [csvEmail]
         }),
     })
         .then(response => response.json())
