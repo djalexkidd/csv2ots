@@ -1,0 +1,23 @@
+services:
+  csv2ots:
+    image: ghcr.io/djalexkidd/csv2ots:latest
+    container_name: csv2ots
+    restart: always
+    networks:
+      - proxy
+    environment:
+      PORT: 3000
+      OTS_HOST: "https://ots.change.me"
+      OTS_USERNAME: "changeme@example.com"
+      OTS_APIKEY: "12345678"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.csv2ots.rule=Host(`csv2ots.change.me`)"
+      - "traefik.http.routers.csv2ots.entrypoints=websecure"
+      - "traefik.http.routers.csv2ots.tls=true"
+      - "traefik.http.services.csv2ots.loadbalancer.server.port=3000"
+      - "traefik.http.routers.csv2ots.tls.certresolver=myresolver"
+
+networks:
+  proxy:
+    name: proxy

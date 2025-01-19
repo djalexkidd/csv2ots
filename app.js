@@ -60,11 +60,16 @@ function csv2json(file) {
           results[key] = value;
       })
       .on('end', () => {
+          fs.unlink(file.path, (err) => {
+            if (err) {
+                console.error(`Error deleting file: ${err}`);
+            }
+          });
           return results;
       });
 };
 
-async function otsCreate(csvEmail, csvSecret) {
+function otsCreate(csvEmail, csvSecret) {
     fetch(`${process.env.OTS_HOST}/api/v1/share`, {
         method: 'POST',
         headers: {
@@ -80,7 +85,6 @@ async function otsCreate(csvEmail, csvSecret) {
         .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.error('Error:', error));
-    
 };
 
 ///////////////////////
@@ -104,7 +108,7 @@ app.post('/upload', (req, res) => {
         if (req.file == undefined) {
           res.render('index', { msg: 'No file selected!' });
         } else {
-          csv2json(req.file)
+          csv2json(req.file);
           res.render('index', {
             msg: 'File uploaded!'
           });
@@ -126,4 +130,4 @@ app.get('*', (req, res) => {
 /////////////////////////////////////////////
 // Écoute du serveur sur le port configuré //
 /////////////////////////////////////////////
-app.listen(process.env.PORT, () => console.log("Server is running on port " + process.env.PORT));
+app.listen(process.env.PORT || 3000, () => console.log("Server is running on port " + process.env.PORT));

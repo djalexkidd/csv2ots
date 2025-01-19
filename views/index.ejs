@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>csv2ots</h1>
+    <p>Un utilitaire web pour créer en masse des secrets <a href="https://onetimesecret.com/" target="_blank">Onetime Secret</a> et les envoyer par email.</p>
     <h2>Téléversez un fichier .csv</h2>
     <form action="/upload" method="post" enctype="multipart/form-data">
         <input type="file" name="csvfile" accept=".csv" required>
@@ -14,5 +15,16 @@
     </form>
     
     <%= msg %>
+
+    <h2>Informations sur le format CSV</h2>
+
+    <p>Chaque ligne contient un secret à envoyer au destinataire.</p>
+
+    <p>La première colonne est l'adresse email du destinataire, la seconde colonne est le secret à envoyer.</p>
+
+    <p>Par exemple, le fichier CSV quand ouvert dans un éditeur de texte, doit ressembler à ça :</p>
+
+    <p>john.doe@mailservice.com,1Vlw1f5Q<br>
+    jacob@mailservice.com,hXtD13fl</p>
 </body>
 </html>
