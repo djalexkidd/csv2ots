@@ -90,10 +90,8 @@ function checkFileType(file, cb) {
     const filetypes = /csv/;
     // Check extension
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    // Check mime type
-    const mimetype = filetypes.test(file.mimetype);
   
-    if (mimetype && extname) {
+    if (extname) {
       return cb(null, true);
     } else {
       cb('Error: CSV Only!');
