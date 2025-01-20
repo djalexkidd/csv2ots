@@ -3,34 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/index.css">
     <title>csv2ots</title>
 </head>
 <body>
-    <h1>csv2ots</h1>
-    <p>Un utilitaire web pour créer en masse des secrets <a href="https://onetimesecret.com/" target="_blank">Onetime Secret</a> et les envoyer par email.</p>
-    <h2>Téléversez un fichier .csv</h2>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="csvfile" accept=".csv" required>
-        <button type="submit">Téléverser</button>
-    </form>
-    
-    <%= msg %>
+    <div class="container">
+        <div class="box">
+            <h1>csv2ots</h1>
+            <p>Un utilitaire web pour créer en masse des secrets <a href="https://onetimesecret.com/" target="_blank">Onetime Secret</a> et les envoyer par email.</p>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <h2>Téléversez un fichier .csv</h2>
+                <input type="file" name="csvfile" accept=".csv" required>
+                <button type="submit">Téléverser</button>
+            </form>
+            <% if (process.env.LDAP_ENABLE === "true") { %>
+                <a href="/logout">Déconnexion</a>
+            <% } %>
+            <%= msg %>
+        </div>
+        
+        <div class="box">
+            <h2>Informations sur le format CSV</h2>
 
-    <h2>Informations sur le format CSV</h2>
+            <p>Chaque ligne contient un secret à envoyer au destinataire.</p>
 
-    <p>Chaque ligne contient un secret à envoyer au destinataire.</p>
+            <p>La première colonne est l'adresse email du destinataire, la seconde colonne est le secret à envoyer.</p>
 
-    <p>La première colonne est l'adresse email du destinataire, la seconde colonne est le secret à envoyer.</p>
+            <p>Par exemple, le fichier CSV quand ouvert dans un éditeur de texte, doit ressembler à ça :</p>
 
-    <p>Par exemple, le fichier CSV quand ouvert dans un éditeur de texte, doit ressembler à ça :</p>
+            <p>john.doe@mailservice.com,1Vlw1f5Q<br>
+            jacob@mailservice.com,hXtD13fl</p>
+        </div>
 
-    <p>john.doe@mailservice.com,1Vlw1f5Q<br>
-    jacob@mailservice.com,hXtD13fl</p>
+        <div class="box">
+            <h2>À propos du logiciel</h2>
 
-    <h3>À propos du logiciel</h3>
+            <p>csv2ots par Alexandre Poyer</p>
 
-    <p>csv2ots par Alexandre Poyer</p>
-
-    <a href="https://github.com/djalexkidd/csv2ots" target="_blank">Code source</a>
+            <a href="https://github.com/djalexkidd/csv2ots" target="_blank">Code source</a>
+        </div>
+    </div>
 </body>
 </html>

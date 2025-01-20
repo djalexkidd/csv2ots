@@ -162,6 +162,14 @@ app.post('/login', passport.authenticate('ldapauth', {
   failureFlash: true
 }));
 
+app.get('/logout', function(req, res){
+  req.session.destroy(function(err) {
+    req.logout(function() {
+      res.redirect('/login');
+    });
+  });
+});
+
 // Téléverser un fichier
 app.post('/upload', ensureAuthenticated, (req, res) => {
     upload(req, res, (err) => {
