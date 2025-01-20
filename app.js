@@ -3,11 +3,18 @@
 ////////////////////////////////
 require("dotenv").config();
 const express = require("express");
+const expressSession = require('express-session');
 const multer = require('multer');
 const path = require("path");
 const app = express();
 const csv = require('csv-parser');
 const fs = require('fs');
+const passport = require('passport');
+const flash = require('express-flash')
+
+const ensureAuthenticated = require('./middlewares/ensureAuthenticated').default;
+
+const LdapStrategy = require('passport-ldapauth');
 
 //////////////////////////////
 // Configuration de Express //
@@ -15,6 +22,50 @@ const fs = require('fs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.set('view engine', 'ejs');
+
+app.use(expressSession({
+  secret: process.env.SECRET || 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  maxAge: 86400000,
+  cookie: {httpOnly: false} }
+));
+
+app.use(express.urlencoded({ extended : true }));
+app.use(express.json());
+
+app.use(flash());
+
+///////////////////////////////
+// Configuration de passport //
+///////////////////////////////
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+/////////////////////////////
+//  Configuration de LDAP  //
+/////////////////////////////
+const options = {
+  server: {
+    url: process.env.LDAP_HOST,
+    bindDN: process.env.LDAP_BINDDN,
+    bindCredentials: process.env.LDAP_PASSWORD,
+    searchBase: process.env.LDAP_SEARCHBASE,
+    searchFilter: process.env.LDAP_SEARCHFILTER,
+    // searchAttributes: undefined, // Par défaut, tous les attributs sont récupérés
+  }
+};
+
+passport.use(new LdapStrategy(options));
 
 // Set up storage engine
 const storage = multer.diskStorage({
@@ -92,14 +143,27 @@ function otsCreate(csvEmail, csvSecret) {
 ///////////////////////
 
 // Page d'accueil
-app.get("/", async (req, res) => {
+app.get("/", ensureAuthenticated, (req, res) => {
     res.render('index.ejs', {
       msg: ''
     });
 });
 
+// Page de connexion
+app.get("/login", (req, res) => {
+  res.render('login.ejs', {
+    msg: req.flash('error')
+  });
+});
+
+app.post('/login', passport.authenticate('ldapauth', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}));
+
 // Téléverser un fichier
-app.post('/upload', (req, res) => {
+app.post('/upload', ensureAuthenticated, (req, res) => {
     upload(req, res, (err) => {
       if (err) {
         console.log(err);

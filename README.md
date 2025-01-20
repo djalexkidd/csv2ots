@@ -19,6 +19,7 @@ services:
       OTS_HOST: "https://ots.change.me"
       OTS_USERNAME: "changeme@example.com"
       OTS_APIKEY: "12345678"
+      LDAP_ENABLE: false
     ports:
       - "3000:3000"
 ```
@@ -29,6 +30,10 @@ Pour avoir un exemple avec Traefik : [docker-compose.yaml avec Traefik](https://
 
 Cette application a besoin d'être configurée pour fonctionner. Remplissez les variables d'environnement dans ```.env``` ou dans Docker Compose.
 
+Pour avoir un exemple de configuration avec l'authentification par Active Directory : [.env avec AD](https://github.com/djalexkidd/csv2ots/blob/master/.env.example)
+
+### Général
+
 ```PORT``` : Port d'écoute du serveur. (Défaut: 3000)
 
 ```OTS_HOST``` : Adresse du serveur cible Onetime Secret.
@@ -36,6 +41,22 @@ Cette application a besoin d'être configurée pour fonctionner. Remplissez les 
 ```OTS_USERNAME``` : Nom d'utilisateur (adresse email).
 
 ```OTS_APIKEY``` : Clé d'API de l'utilisateur.
+
+### Authentification LDAP
+
+```LDAP_ENABLE``` : Activer l'authentification.
+
+```LDAP_HOST``` : Adresse du serveur LDAP.
+
+```LDAP_BINDDN``` : Nom d'utilisateur du manager.
+
+```LDAP_PASSWORD``` : Mot de passe du manager.
+
+```LDAP_SEARCHBASE``` : Champ de recherche des utilisateurs.
+
+```LDAP_SEARCHFILTER``` : Filtre de recherche.
+
+```SECRET``` : Graine pour saler le token de connexion.
 
 ## Structure du fichier CSV
 

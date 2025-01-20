@@ -10,6 +10,13 @@ services:
       OTS_HOST: "https://ots.change.me"
       OTS_USERNAME: "changeme@example.com"
       OTS_APIKEY: "12345678"
+      LDAP_ENABLE: true
+      LDAP_HOST: "ldap://192.168.122.61:389"
+      LDAP_BINDDN: "ldap_ots@example.com"
+      LDAP_PASSWORD: "changeme"
+      LDAP_SEARCHBASE: "cn=Users,dc=example,dc=com"
+      LDAP_SEARCHFILTER: "(&(objectcategory=person)(objectclass=user)(|(samaccountname: {{username}})(mail={{username}})))"
+      SECRET: "Seed for sessions"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.csv2ots.rule=Host(`csv2ots.change.me`)"
